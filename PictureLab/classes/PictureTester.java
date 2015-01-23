@@ -20,9 +20,9 @@ public class PictureTester
   /** Method to test mirrorVertical */
   public static void testMirrorVertical()
   {
-    Picture caterpillar = new Picture("caterpillar.jpg");
+    Picture caterpillar = new Picture("alex.jpg");
     caterpillar.explore();
-    caterpillar.mirrorVertical();
+    caterpillar.mirrorVerticalRightToLeft();
     caterpillar.explore();
   }
   
@@ -51,6 +51,41 @@ public class PictureTester
     swan.explore();
   }
   
+  public static void testCropAndCopy()
+  {
+      Picture background = new Picture("beach.jpg");
+      Picture alex = new Picture("alex.jpg");
+      background.cropAndCopy(alex, 45,200,10,257,100,110);
+      background.explore();
+  }
+  
+  public static void testPosterize()
+  {
+      Picture alex = new Picture("beach.jpg");
+      alex.posterize();
+      alex.explore();
+  }
+  
+  public static void testGrayscale()
+  {
+      Picture alex = new Picture("alex.jpg");
+      alex.grayscale();
+      alex.explore();      
+  }
+  public static void testSepia()
+  {
+     Picture alex = new Picture("beach.jpg");
+     alex.sepia();
+     alex.explore();
+  }
+  
+  public static void testPixelate()
+  {
+     Picture alex = new Picture("beach.jpg");
+     alex.pixelate();
+     alex.explore();
+  }
+    
   /** Main method for testing.  Every class can have a main
     * method in Java */
   public static void main(String[] args)
@@ -58,7 +93,7 @@ public class PictureTester
     // uncomment a call here to run a test
     // and comment out the ones you don't want
     // to run
-    testZeroBlue();
+    //testZeroBlue();
     //testKeepOnlyBlue();
     //testKeepOnlyRed();
     //testKeepOnlyGreen();
@@ -80,5 +115,10 @@ public class PictureTester
     //testSetRedToHalfValueInTopHalf();
     //testClearBlueOverValue(200);
     //testGetAverageForColumn(0);
+    //testMirrorVertical();
+    //testCropAndCopy();
+    //testPosterize();
+    //testGrayscale();
+    testPixelate();
   }
 }

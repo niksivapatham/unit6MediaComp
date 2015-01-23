@@ -98,5 +98,42 @@ public class IntArrayWorker
       }
     }
   }
+  
+  public int getCount(int buttNugget)
+  {
+      int total = 0;
+      for (int[] rowAarray :matrix)   
+      {
+          for (int n00mber : rowArray)
+          {
+              if (buttNugget == n00mber)
+              {
+                  total++;
+              }
+          }                    
+      }
+      return total;
+  } 
  
+  public int getLargest()
+  {
+      int largestNum = matrix[0][0];
+      for (int[] rowAarray :matrix)   
+      {
+          for (int n00mber : rowArray)
+          {
+              if (buttNugget > n00mber)
+              {
+                  largestNum = buttNugget;
+              }
+          }                    
+      }
+      return largestNum; 
+  }
+  
+  public getColTotal()
+  {
+            
+  }
+
 }
