@@ -228,15 +228,8 @@ public class Picture extends SimplePicture
     }
 
     /**
-     * An example of a method - replace this comment with your own
-     *  that describes the operation of the method
-     *
-     * @pre     preconditions for the method
-     *          (what the method assumes about the method's parameters and class's state)
-     * @post    postconditions for the method
-     *          (what the method guarantees upon completion)
-     * @param   y   description of parameter y
-     * @return  description of the return value
+     * Mirrors the right side of the picture to the left
+     * so that the left side lookes identical
      */
     public void mirrorVerticalRightToLeft()
     {
@@ -249,6 +242,7 @@ public class Picture extends SimplePicture
             for (int col = 0; col < width / 2; col++)
             {
                 leftPixel = pixels[row][col];
+                //The equivalent pixel on the other half, odd/even dimensions accounted for
                 rightPixel = pixels[row][width - 1 - col];
                 leftPixel.setColor(rightPixel.getColor());
             }
@@ -256,43 +250,37 @@ public class Picture extends SimplePicture
     }
 
     /**
-     * An example of a method - replace this comment with your own
-     *  that describes the operation of the method
-     *
-     * @pre     preconditions for the method
-     *          (what the method assumes about the method's parameters and class's state)
-     * @post    postconditions for the method
-     *          (what the method guarantees upon completion)
-     * @param   y   description of parameter y
-     * @return  description of the return value
+     * Mirrors the bottom half to look like the top half
      */
     public void mirrorHorizontal()
     {
         Pixel[][] pixels = this.getPixels2D();
-        Pixel leftPixel = null;
-        Pixel rightPixel = null;
+        Pixel topPixel = null;
+        Pixel bottomPixel = null;
         int width = pixels[0].length;
         for (int row = 0; row < pixels.length; row++)
         {
-            for (int col = 0; col < width / 2; col++)
+            for (int col = 0; col < width; col++)
             {
-                leftPixel = pixels[row][col];
-                rightPixel = pixels[pixels.length-1-row][col];
-                rightPixel.setColor(leftPixel.getColor());
+                topPixel = pixels[row][col];
+                bottomPixel = pixels[pixels.length-1-row][col];
+                bottomPixel.setColor(topPixel.getColor());
             }
         } 
     }
 
     /**
-     * An example of a method - replace this comment with your own
-     *  that describes the operation of the method
+     * Crops a section of a picture into the desired location on a larger picture
+     * 
+     * @pre     The destination picture is bigger than the source
      *
-     * @pre     preconditions for the method
-     *          (what the method assumes about the method's parameters and class's state)
-     * @post    postconditions for the method
-     *          (what the method guarantees upon completion)
-     * @param   y   description of parameter y
-     * @return  description of the return value
+     * @param   sourcePicture   The picture object to be cropped and coppied
+     * @param   startSourceRow   the x value for the begining pixel of the crop
+     * @param   endSourceRow   the x value for the end pixel of the crop
+     * @param   startSourceCol   the y value for the begining pixel of the crop
+     * @param   endSourceCol   the y value for the end pixel of the crop
+     * @param   startDestRow   the x value for the upper left pixel on which the image is to be cropped
+     * @param   startDestCol   the y value for the upper left pixel on which the image is to be cropped
      */
     public void cropAndCopy( Picture sourcePicture, int startSourceRow, int endSourceRow, int startSourceCol,int endSourceCol,int startDestRow, int startDestCol )
     {
@@ -302,6 +290,8 @@ public class Picture extends SimplePicture
         int rowCount = 0;
         int colCount = 0;
         System.out.println(endSourceCol);
+        
+        //Creates the cropped picture as a matrix
         for (int row = startSourceRow; row<(endSourceRow); row++)
         {
             for (int col = startSourceCol; col<(endSourceCol); col++)
@@ -317,6 +307,7 @@ public class Picture extends SimplePicture
         colCount = 0;
         Pixel[][] pixels = this.getPixels2D();
         
+        //Copies the cropped picture to the picture being called on
         for (int row = startDestRow; row<((endSourceRow-startSourceRow)+startDestRow); row++)
         {
             for (int col = startDestCol; col<((endSourceCol-startSourceCol)+startDestCol); col++)
@@ -329,6 +320,9 @@ public class Picture extends SimplePicture
         }     
     }
     
+    /**
+     * Creates a posterize effect, it looks pretty cool
+     */
     public void posterize()
     {
         Pixel[][] pixels = this.getPixels2D();
@@ -337,6 +331,7 @@ public class Picture extends SimplePicture
         {
             for (int col = 0; col < width; col++)
             {
+                //Decides which bin the red color is in and standardizes it
                 int redValue = pixels[row][col].getRed();
                 if (redValue<=255 && redValue>=192)
                 {
@@ -349,6 +344,7 @@ public class Picture extends SimplePicture
                     redValue = 32;
                 }
                 
+                //Decides which bin the blue color is in and standardizes it
                 int blueValue = pixels[row][col].getBlue();
                 if (blueValue<=255 && blueValue>=192)
                 {
@@ -361,6 +357,7 @@ public class Picture extends SimplePicture
                     blueValue = 32;
                 }
                 
+                //Decides which bin the green color is in and standardizes it
                 int greenValue = pixels[row][col].getGreen();
                 if (greenValue<=255 && greenValue>=192)
                 {
@@ -373,12 +370,16 @@ public class Picture extends SimplePicture
                     greenValue = 32;
                 }
                 
+                //Creates the standardized color and sets it
                 Color color = new Color(redValue, greenValue, blueValue);
                 pixels[row][col].setColor(color);
             }
         } 
     }
-        
+     
+    /**
+     * Creates a grayzcale effect
+     */
     public void grayscale()
     {
         Pixel[][] pixels = this.getPixels2D();
@@ -390,13 +391,22 @@ public class Picture extends SimplePicture
                 int redValue = pixels[row][col].getRed();
                 int greenValue = pixels[row][col].getGreen();
                 int blueValue = pixels[row][col].getBlue();
+                //Averages the values
                 int average = (redValue+greenValue+blueValue)/3;
+                //Sets all values to the same average color
                 Color color = new Color(average,average,average);
                 pixels[row][col].setColor(color);
             }
         }
     }
     
+    /**
+     * creates a sepia effect
+     * 
+     * if red < 60 then reduce all three components to 90% of their original value
+     * else if red < 190 then reduce just blue to 80% of its original value
+     * else reduce just blue to 90% of its original value
+     */
     public void sepia() 
     {
         grayscale();
@@ -407,7 +417,6 @@ public class Picture extends SimplePicture
             for (int col = 0; col < width; col++)
             {
                 int redValue = pixels[row][col].getRed();
-                System.out.println(redValue);
                 int blueValue = pixels[row][col].getBlue();
                 int greenValue = pixels[row][col].getGreen();
                 if (redValue<60){
@@ -425,6 +434,9 @@ public class Picture extends SimplePicture
         }
     }
     
+    /**
+     * Pixelats, but doesn't do a great job
+     */
     public void pixelate()
     {
         Pixel[][] pixels = this.getPixels2D();
